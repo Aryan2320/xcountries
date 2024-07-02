@@ -83,7 +83,7 @@ const Testing = () => {
             </div>
           ))
         ) : (
-          <p>No countries found.</p>
+          ''
         )}
       </div>
     </>
