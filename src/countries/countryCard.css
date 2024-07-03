@@ -1,0 +1,22 @@
+.countryCard{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 10px;
+    margin: 10px;
+    height: 100px;
+    width: 100px;
+    border:1px solid black;
+    border-radius: 8px;
+
+}
+
+img{
+    height: 55px;
+    width: 55px;
+}
+
+p{
+    font-weight: bold;
+}

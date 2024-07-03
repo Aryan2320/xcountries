@@ -3,12 +3,12 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 // import App from './App';
 import reportWebVitals from './reportWebVitals';
-import Testing from './countries/countries';
+import Countries from './countries/countries';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Testing />
+    <Countries />
   </React.StrictMode>
 );
 

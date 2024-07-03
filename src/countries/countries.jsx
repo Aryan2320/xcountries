@@ -1,93 +1,64 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import styles from "./countryCard.css";
 
-const Testing = () => {
-  const [data, setData] = useState([]);
-  const [countrySearch, setCountrySearch] = useState("");
 
-  const countryData = async () => {
-    try {
-      let rawData = await fetch('https://restcountries.com/v3.1/all');
-      let finalData = await rawData.json();
-      setData(finalData);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
-  const countryData2 = async () => {
-    try {
-    
-        let rawData = await fetch(`https://restcountries.com/v3.1/name/${countrySearch}`);
-        let finalData = await rawData.json();
-        setData(finalData);
-      } 
-     catch (error) {
-      console.log(error);
-    }
-  };
 
-  useEffect(() => {
-    if(countrySearch){
-      countryData2();
+
+function CountryCard({name,flagImage,flagAltImage}){
+    return(
+        <div className={styles.countryCard}>
+         <img src={flagImage} alt={flagAltImage}/>
+         <p>{name}</p>
+        </div>
+    )
+}
+
+function Countries(){
+
+    const apiEndPoint="https://restcountries.com/v3.1/all";
+    const [countries,setCountries]=useState([]);
+    const [search,setSearch]=useState("");
+
+    async function fetchData(){
+        try{
+            const res=await fetch(apiEndPoint);
+            const data=await res.json();
+             console.log("data:",data);
+            setCountries(data);
+            return data;
+        }catch(err){
+            console.log(err);
+        }
     }
-    else{
-      countryData();
-    }
+    useEffect(()=>{
+        fetchData()
    
-  }, [countrySearch]); 
+    },[])
 
-  return (
-    <>
-      <div style={{ marginTop: "10px" }}>
+    
+    const filteredCountries = Array.isArray(countries)
+    ? countries.filter(country =>
+        country.name.common.toLowerCase().includes(search.toLowerCase())
+      )
+    : [];
+    return (
+        <div>
         <center>
-          <input
-            type="text"
-            placeholder="Search countries"
-            value={countrySearch}
-            onChange={(e) => {
-              setCountrySearch(e.target.value);
-            }}
-            style={{ width: "650px", height: "25px", borderWidth: "2px" }}
-          />
-        </center>
-      </div>
-      <hr />
-      <div
-        className="countryCard"
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(7, 1fr)",
-          padding: "20px",
-          gap: "10px",
-        }}
-      >
-        {data.length > 0 ? (
-          data.map((element) => (
-            <div
-              className="countryCard"
-              key={element.id}
-              style={{
-                border: "1px solid #ddd",
-                borderRadius: "10px",
-                textAlign: "center",
-                padding: "20px",
-              }}
-            >
-              <img
-                src={element.flags.svg}
-                alt={element.flags.alt}
-                width="100px"
-                height="100px"
-              />
-              <p>{element.name.common}</p>
+            <div style={{margin:"20px",padding:"20px"}}>
+            <input style={{width:"600px",height:"25px"}} type="text" placeholder="Search for countries" value={search} onChange={e=>setSearch(e.target.value)}/>
             </div>
-          ))
-        ) : (
-          ''
-        )}
-      </div>
-    </>
-  );
-};
+            </center>
+        <div style={{
+            display:"flex",flexWrap:"wrap",alignItems:"center",justifyContent:"center"
+        }}>
+           
+            
+            {filteredCountries.map((country)=>(<CountryCard name={country.name.common} flagImage={country.flags.png} flagAltImage={country.flags.alt}/>))}
 
-export default Testing;
+
+        </div>
+        </div>
+    )
+}
+export default Countries;
